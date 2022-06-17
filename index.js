@@ -53,6 +53,16 @@ app.get("/healthz", function(req, res) {
 });
 
 //set app to listen on port 3000
-app.listen(3000, function() {
-  console.log("server is running on port http://localhost:3000");
+const server = app.listen(3000, function() {
+  console.log("Server listening on http://localhost:3000");
 });
+
+function shutdown() {
+  console.log('Signal received: closing HTTP server')
+  server.close(() => {
+    console.log('HTTP server closed')
+  })
+}
+
+process.on('SIGTERM', shutdown)
+process.on('SIGTINT', shutdown)
