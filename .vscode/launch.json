@@ -6,6 +6,7 @@
     "configurations": [
         {
             "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/srv/todo-app",
             "name": "Attach",
             "port": 9229,
             "request": "attach",
