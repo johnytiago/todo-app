@@ -1,5 +1,5 @@
 <html>
-<head> 
+<head>
 <title> ToDo App </title>
  <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet">
  <link href="/styles.css" rel="stylesheet">
@@ -21,14 +21,20 @@
     <li><input type="checkbox" name="check" value="<%= task[i] %>" /> <%= task[i] %> </li>
 <% } %>
 
-<button formaction="/removetask" type="submit" id="top"> Remove </button>
+<br/>
+<button formaction="/removetask" type="submit" id="top"> Complete </button>
 </form>
+
+<% if (showTiger) { %>
+  <img src="/cooler-tiger.gif" alt="Blue tiger, seasons change">
+<% } %>
 
 <h2> Completed task </h2>
 
  <% for(var i = 0; i < complete.length; i++){ %>
-    <li><input type="checkbox" checked><%= complete[i] %> </li>
+    <li>✅ <%= complete[i] %></li>
 <% } %>
+
 
 </div>
 

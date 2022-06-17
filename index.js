@@ -1,48 +1,55 @@
 //dependencies required for the app
-var express = require("express");
-var bodyParser = require("body-parser");
-var app = express();
+const express = require("express");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const cors = require('cors')
+const app = express();
 
+const seasonsChange= require('./seasons-change.js')
+const SIUUU = require('./siuuu.js')
+
+//placeholders for added task
+const task = ["Find the bug in this app 🔎", "Seasons change 🐯"];
+//placeholders for removed task
+const complete = ["Learn how to debugging stuff in Node"];
+
+app.use(cors())
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 //render css files
 app.use(express.static("public"));
 
-//placeholders for added task
-var task = ["buy socks", "practise with nodejs"];
-//placeholders for removed task
-var complete = ["finish jquery"];
+app.use(SIUUU)
 
 //post route for adding new task 
 app.post("/addtask", function(req, res) {
-    var newTask = req.body.newtask;
-    //add the new task from the post route
-    task.push(newTask);
-    res.redirect("/");
+  //add the new task from the post route
+  task.push(req.body.newtask);
+  res.redirect("/");
 });
 
-app.post("/removetask", function(req, res) {
-    var completeTask = req.body.check;
-    //check for the "typeof" the different completed task, then add into the complete task
-    if (typeof completeTask === "string") {
-        complete.push(completeTask);
-        //check if the completed task already exits in the task when checked, then remove it
-        task.splice(task.indexOf(completeTask), 1);
-    } else if (typeof completeTask === "object") {
-        for (var i = 0; i < completeTask.length; i++) {
-            complete.push(completeTask[i]);
-            task.splice(task.indexOf(completeTask[i]), 1);
-        }
+app.post("/removetask", function({ body }, res) {
+  if (body.check) {
+    const completeTask = Array.isArray(body.check) ? body.check : [body.check];
+
+    for (let i = 0; i < completeTask.length; i++) {
+      complete.push(completeTask[i]);
+      task.splice(task.indexOf(completeTask[i]), 1);
     }
-    res.redirect("/");
+  }
+  res.redirect("/");
 });
+
 
 //render the ejs and display added task, completed task
 app.get("/", function(req, res) {
-    res.render("index", { task: task, complete: complete });
+  const showTiger = seasonsChange(req, res)
+  res.render("index", { task: task, complete: complete, showTiger });
 });
+
 
 //set app to listen on port 3000
 app.listen(3000, function() {
-    console.log("server is running on port 3000");
+  console.log("server is running on port http://localhost:3000");
 });
