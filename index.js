@@ -48,6 +48,9 @@ app.get("/", function(req, res) {
   res.render("index", { task: task, complete: complete, showTiger });
 });
 
+app.get("/healthz", function(req, res) {
+  res.status(200).send()
+});
 
 //set app to listen on port 3000
 app.listen(3000, function() {
